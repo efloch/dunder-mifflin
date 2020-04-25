@@ -4,6 +4,9 @@ import src.extract_script as input
 
 
 def clean_line(line):
+    """
+    Add
+    """
     return line
 
 
@@ -22,10 +25,10 @@ def process_lines(df_script):
     """
     Takes in Dataframe script and process "line" column which
     contains the text of each lines
-    - Clean the text
-    - Tokenize it
-    - Get non stop words
-    - Add word count
+    - Clean the text (column clean_line)
+    - Tokenize it (tokenized_line)
+    - Add word count (word_count)
+    - Get non stop words (tokenized_non_stop)
     """
     return df_script
 
