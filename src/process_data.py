@@ -3,7 +3,8 @@ from src.config import *
 
 
 def get_script_data():
-    df_script = pd.DataFrame()
+    df_script = pd.read_csv(os.path.join(
+        DATA_PATH, 'raw/office_transcript.csv'), header=None, sep='\n')
     return df_script
 
 
