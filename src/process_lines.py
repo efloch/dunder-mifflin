@@ -1,6 +1,5 @@
 from src.params import *
 from src.config import *
-import src.extract_script as input
 
 
 def clean_line(line):
@@ -64,11 +63,6 @@ def process_lines(input_df):
     input_df['clean_line'] = input_df['line_text'].apply(clean_line)
     input_df['tokenized_line'] = input_df['clean_line'].apply(tokenize_line)
     input_df['word_count'] = input_df['tokenized_line'].apply(len)
-    input_df['tokenized_non_stop'] = input_df['tokenized_line'].apply(remove_stopwords)
+    input_df['tokenized_non_stop'] = input_df['tokenized_line'].apply(
+        remove_stopwords)
     return input_df
-
-
-if __name__ == '__main__':
-    df_script = input.load_script()
-    df = process_lines(df_script)
-    print(df)

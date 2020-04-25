@@ -1,5 +1,6 @@
 from src.params import *
 from src.config import *
+import src.process_lines as process
 
 
 def get_script_data(save=False):
@@ -54,26 +55,35 @@ def get_extracted_script():
     return df_script
 
 
-def load_script(no_spoil_season=9, no_spoil_episode=23):
+def load_script(no_spoil_season=9, no_spoil_episode=23, process_lines=True):
+    """
+    Reads in csv with one row per line
+
+    Args:
+        no_spoil_season (int): Last season seen
+        no_spoil_episode (int): Last episode seen
+        process_lines (bool): If true, enrich tables with cleaned lines,
+                                tokenized line and word counts
+    Returns:
+        pd.DataFrame: dataset, filtered and/or enriched
+    """
     df = pd.read_csv(os.path.join(
         DATA_PATH, 'raw/the_office_scene.csv'))
 
     if no_spoil_episode:
+        # Keep data only about the episode seen
         df['id_episode'] = df['season'].astype(str) + df['episode'].astype(str)
         id_last_episode = df[(df['season'] == no_spoil_season)
                              & (df['episode'] == no_spoil_episode)].id_episode.values[0]
         df = df[df['id_episode'] <= id_last_episode]
+
+    if process_lines:
+        df = process.process_lines(df)
+
     return df
 
 
 if __name__ == '__main__':
-    # To clean old csv :
-    # df_clean = get_extracted_script()
-    # outpath = os.path.join(DATA_PATH, 'intermediary/')
-    # if not os.path.exists(outpath):
-    #     os.makedirs(outpath)
-    # df_clean.to_csv(os.path.join(outpath, 'script_clean.csv'), index=False)
-
     # To load pre-cleaned csv
     df = load_script(no_spoil_season=7, no_spoil_episode=15)
     print(df)
