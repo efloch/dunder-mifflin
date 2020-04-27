@@ -58,6 +58,7 @@ def get_sentiment_score(line):
         Sentiment score between -1 and 1 using textblob sentiment lexicon
     """
     score = textblob.TextBlob(line).sentiment.polarity
+    score = round(float(score), 2)
     return score
 
 

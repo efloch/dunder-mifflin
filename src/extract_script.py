@@ -86,4 +86,5 @@ def load_script(no_spoil_season=9, no_spoil_episode=23, process_lines=True):
 if __name__ == '__main__':
     # To load pre-cleaned csv
     df = load_script(no_spoil_season=7, no_spoil_episode=15)
+    df.to_csv('../data/processed/processed_lines.csv', index=False, sep=';')
     print(df)
