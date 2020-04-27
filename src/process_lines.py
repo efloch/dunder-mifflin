@@ -48,6 +48,19 @@ def remove_stopwords(tokens, stop_words=STOPWORDS):
     return filtered_tokens
 
 
+def get_sentiment_score(line):
+    """
+
+    Args:
+        line (str):
+
+    Returns:
+        Sentiment score between -1 and 1 using textblob sentiment lexicon
+    """
+    score = textblob.TextBlob(line).sentiment.polarity
+    return score
+
+
 def process_lines(input_df):
     """
     Takes in Dataframe script and process "line" column which
@@ -56,6 +69,7 @@ def process_lines(input_df):
     - Tokenize it (tokenized_line)
     - Add word count (word_count)
     - Get non stop words (tokenized_non_stop)
+    - Add sentiment score (sentiment_score)
 
     Args:
         input_df (pd.DataFrame): raw dataset containing one line per row
@@ -65,4 +79,5 @@ def process_lines(input_df):
     input_df['word_count'] = input_df['tokenized_line'].apply(len)
     input_df['tokenized_non_stop'] = input_df['tokenized_line'].apply(
         remove_stopwords)
+    input_df['sentiment_score'] = input_df['clean_line'].apply(get_sentiment_score)
     return input_df
