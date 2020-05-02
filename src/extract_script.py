@@ -1,9 +1,10 @@
 from src.params import *
 from src.config import *
 import src.process_lines as process
+import aggregate_script as agg
 
 
-def get_script_data(save=False):
+def get_episode_info(save=False):
     """
     Reads in script data file, extract season, episode number, episodes
     title, and each line.
@@ -17,22 +18,19 @@ def get_script_data(save=False):
     df_episodes_info = df_script[0].str.extract(
         r'(?P<season>\d*)x(?P<episode>[^-]*) - (?P<title>[^;]*);')
 
-    # Split episode into all episodes
-    df_split_script = df_script[0].str.split(
-        r'\d*x[^-]*- [^;]*;', expand=True)
-    df_split_script.drop(0, 1, inplace=True)
+    df_episodes_info['id_episode'] = df_episodes_info['season'].astype(
+        str) + df_episodes_info['episode'].apply(_val_episode)
 
-    # Concat info and lines
-    df_script = pd.concat([df_episodes_info, df_split_script], axis=1)
     if save:
         df_script.to_csv(os.path.join(
-            DATA_PATH, 'intermediary/script_structure.csv'), index=False)
-    return df_script
+            DATA_PATH, 'intermediary/episode_info.csv'), index=False)
+    return df_episodes_info
 
 
 def _val_episode(x):
-    str_episode = str(x).split('/')
-    return str_episode[0]
+    if '/' in x:
+        x = str(x).split('/')[0]
+    return x.zfill(2)
 
 
 def get_extracted_script():
@@ -70,22 +68,30 @@ def load_script(no_spoil_season=8, no_spoil_episode=23, process_lines=True):
     df = pd.read_csv(os.path.join(
         DATA_PATH, 'raw/the_office_scene.csv'))
 
+    df['id_episode'] = df['season'].astype(
+        str).apply(str.zfill, args=(2,)) + df['episode'].astype(str).apply(str.zfill, args=(2,))
+
+    df_episodes_info = get_episode_info()[['id_episode', 'title']]
+
     if no_spoil_episode:
         # Keep data only about the episode seen
-        df['id_episode'] = df['season'].astype(
-            str) + df['episode'].astype(str).apply(str.zfill, args=(2,))
+
         id_last_episode = df[(df['season'] == no_spoil_season)
                              & (df['episode'] == no_spoil_episode)].id_episode.values[0]
         df = df[df['id_episode'] <= id_last_episode]
 
+    df = df.merge(df_episodes_info, on='id_episode')
+
     if process_lines:
         df = process.process_lines(df)
+
+    df = agg.filter_script(df, {'speaker': NAMES_LIST})
 
     return df
 
 
 if __name__ == '__main__':
     # To load pre-cleaned csv
-    df = load_script(no_spoil_season=7, no_spoil_episode=15)
+    df = load_script(no_spoil_season=8, no_spoil_episode=4)
     df.to_csv(os.path.join(DATA_PATH, 'processed/processed_script.csv'))
     print(df)

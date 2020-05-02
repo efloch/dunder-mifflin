@@ -41,14 +41,14 @@ def add_normalized_count(df_aggregated, scope, method):
     if scope in ['id_episode', 'season']:
         df_total_by_scope = df_aggregated.groupby(scope, as_index=False)[f'{method}_count'].sum()
         df_total_by_scope.rename(
-            columns={f'{method}_count': f'{method}_count_{scope}'}, inplace=True)
+            columns={f'{method}_count': f'total_{method}_count_{scope}'}, inplace=True)
         df_aggregated = df_aggregated.merge(df_total_by_scope, on=scope)
         df_aggregated[f'norm_{method}_count'] = df_aggregated[f'{method}_count'] / \
-            df_aggregated[f'{method}_count_{scope}']
+            df_aggregated[f'total_{method}_count_{scope}']
     else:
-        df_aggregated[f'total_series'] = df_aggregated[f'{method}_count'].sum()
+        df_aggregated[f'total_{method}_series'] = df_aggregated[f'{method}_count'].sum()
         df_aggregated[f'norm_{method}_count'] = df_aggregated[f'{method}_count'] / \
-            df_aggregated[f'total_series']
+            df_aggregated[f'total_{method}_series']
 
     return df_aggregated
 
@@ -99,11 +99,17 @@ def get_all_counts(df_script):
 
     for scope in ['id_episode', 'season', 'all']:
         for method in ['word', 'line']:
-            df_agg = aggregate_script(df_script, scope, method)
+            df_agg = aggregate_script(
+                df_script, scope, method)
+            df_agg.to_csv(os.path.join(DATA_PATH, f'processed/{scope}_{method}_counts.csv'))
+
             df_agg.rename(columns={f'{method}_count': f'{method}_count_{scope}',
                                    f'norm_{method}_count': f'n_{method}_count_{scope}'},
                           inplace=True)
-            df_speakers = df_speakers.merge(df_agg, on=SCOPE_ID_COLS[scope])
+
+            df_speakers = df_speakers.merge(
+                df_agg, on=SCOPE_ID_COLS[scope])
+
     return df_speakers
 
 
