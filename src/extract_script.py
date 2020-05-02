@@ -55,7 +55,7 @@ def get_extracted_script():
     return df_script
 
 
-def load_script(no_spoil_season=9, no_spoil_episode=23, process_lines=True):
+def load_script(no_spoil_season=8, no_spoil_episode=23, process_lines=True):
     """
     Reads in csv with one row per line
 
@@ -72,7 +72,8 @@ def load_script(no_spoil_season=9, no_spoil_episode=23, process_lines=True):
 
     if no_spoil_episode:
         # Keep data only about the episode seen
-        df['id_episode'] = df['season'].astype(str) + df['episode'].astype(str)
+        df['id_episode'] = df['season'].astype(
+            str) + df['episode'].astype(str).apply(str.zfill, args=(2,))
         id_last_episode = df[(df['season'] == no_spoil_season)
                              & (df['episode'] == no_spoil_episode)].id_episode.values[0]
         df = df[df['id_episode'] <= id_last_episode]
