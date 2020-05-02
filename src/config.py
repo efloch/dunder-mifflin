@@ -8,6 +8,7 @@ import seaborn as sns
 import string
 import nltk
 # nltk.download("stopwords")
+import textblob
 
 
 dirname, filename = os.path.split(os.path.abspath(__file__))
