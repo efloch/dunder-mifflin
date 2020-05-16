@@ -10,6 +10,6 @@ NAMES_LIST = ['Michael', 'Dwight', 'Jim', 'Pam', 'Andy',
               'Phyllis', 'Jan', 'Kelly', 'Darryl', 'Toby',
               'Stanley', 'Holly', 'Meredith', 'Creed', 'Gabe',
               'David', 'Karen', 'Robert', 'Roy', 'Nellie',
-              'Charles', 'Jo', 'Deangelo']
+              'Charles', 'Jo', 'Deangelo', 'Pete', 'Clark']
 
 NICKNAMES = ['Temp', 'Tuna']

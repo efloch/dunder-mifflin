@@ -53,7 +53,7 @@ def get_extracted_script():
     return df_script
 
 
-def load_script(no_spoil_season, no_spoil_episode, process_lines=True):
+def load_script(no_spoil_season=None, no_spoil_episode=None, process_lines=True):
     """
     Reads in csv with one row per line
 
@@ -85,7 +85,7 @@ def load_script(no_spoil_season, no_spoil_episode, process_lines=True):
     if process_lines:
         df = process.process_lines(df)
 
-    df = agg.filter_script(df, {'speaker': NAMES_LIST})
+    #df = agg.filter_script(df, {'speaker': NAMES_LIST})
 
     return df
 
