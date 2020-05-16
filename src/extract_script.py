@@ -1,7 +1,11 @@
+import src.aggregate_script as agg
+import src.line_analysis as line
 from src.params import *
 from src.config import *
 import src.process_lines as process
-import src.line_analysis as line
+<< << << < HEAD
+== == == =
+>>>>>> > 08762344ed28b456112b89596fc94f86a50b8bc0
 
 
 def get_episode_info(save=False):
@@ -100,7 +104,11 @@ def load_script(no_spoil_season=9, no_spoil_episode=23,
 
 if __name__ == '__main__':
     # To load pre-cleaned csv
-    df = load_script(
-        process_lines=True, analysis=True)
-    df.to_csv(os.path.join(DATA_PATH, 'processed/processed_script.csv'))
-    print(df)
+<< << << < HEAD
+df = load_script(
+    process_lines=True, analysis=True)
+== == == =
+df = load_script()
+>>>>>> > 08762344ed28b456112b89596fc94f86a50b8bc0
+df.to_csv(os.path.join(DATA_PATH, 'processed/processed_script.csv'))
+print(df)

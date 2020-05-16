@@ -17,7 +17,7 @@ def get_sentiment_score(line):
     return score
 
 
-def extract_mentions(line_tokens, names_list=NAMES_LIST):
+def extract_mentions(line_tokens, names_list=NAMES_LIST+NICKNAMES):
     mentions = []
     for name in names_list:
         name_lo = name.lower()
@@ -39,3 +39,8 @@ if __name__ == '__main__':
     # analysis_df = line_analysis(prep_df)
     # print(analysis_df.head().to_string())
     #analysis_df.to_csv('../data/processed/analyzed_lines.csv', index=False, sep=';')
+    # for char in NAMES_LIST:
+    #     print('Top 10 mentions from', char)
+    #     df = analysis_df[analysis_df.speaker == char]
+    #     mentions_agg = [m for l in df.mentions for m in l]
+    #     print(pd.Series(mentions_agg).value_counts()[:10], '\n')
