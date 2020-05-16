@@ -1,6 +1,6 @@
 from src.params import *
 from src.config import *
-from src.extract_script import *
+# from src.extract_script import load_script
 
 
 def get_sentiment_score(line):
@@ -34,7 +34,8 @@ def line_analysis(df):
 
 
 if __name__ == '__main__':
-    prep_df = load_script(no_spoil_season=8, no_spoil_episode=4)
-    analysis_df = line_analysis(prep_df)
-    print(analysis_df.head().to_string())
+    pass
+    # prep_df = load_script(no_spoil_season=8, no_spoil_episode=4)
+    # analysis_df = line_analysis(prep_df)
+    # print(analysis_df.head().to_string())
     #analysis_df.to_csv('../data/processed/analyzed_lines.csv', index=False, sep=';')
