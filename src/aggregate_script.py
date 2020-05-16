@@ -2,6 +2,8 @@ from src.config import *
 from src.params import *
 import src.extract_script as input
 import src.process_lines as process
+import src.line_analysis as line
+
 
 SCOPE_ID_COLS = {'id_episode': ['speaker', 'season', 'id_episode'],
                  'season': ['speaker', 'season'],
@@ -114,10 +116,10 @@ def get_all_counts(df_script):
 
 
 if __name__ == '__main__':
-    df_script = input.load_script(no_spoil_season=7, no_spoil_episode=16)
+    df_script = input.load_script(process_lines=True, analysis=True)
+    print(df_script)
     df_episode = aggregate_script(
         df_script, scope='id_episode', method='word')
 
     df = get_all_counts(df_script)
     df.to_csv(os.path.join(DATA_PATH, 'processed/all_counts.csv'))
-    print(df.head(5))

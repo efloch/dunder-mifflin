@@ -1,7 +1,11 @@
+import src.aggregate_script as agg
+import src.line_analysis as line
 from src.params import *
 from src.config import *
 import src.process_lines as process
-import src.aggregate_script as agg
+<< << << < HEAD
+== == == =
+>>>>>> > 08762344ed28b456112b89596fc94f86a50b8bc0
 
 
 def get_episode_info(save=False):
@@ -15,8 +19,12 @@ def get_episode_info(save=False):
         DATA_PATH, 'raw/office_transcript.csv'), header=None, sep='\n')
 
     # Extract episode info
-    df_episodes_info = df_script[0].str.extract(
+    df_episodes_info = (df_script[0].str.extract(
         r'(?P<season>\d*)x(?P<episode>[^-]*) - (?P<title>[^;]*);')
+        .set_index(['season', 'title']))
+    df_episodes_info.episode = df_episodes_info.episode.str.split('/').tolist()
+    df_episodes_info = df_episodes_info.explode('episode')
+    df_episodes_info.reset_index(inplace=True)
 
     df_episodes_info['id_episode'] = df_episodes_info['season'].astype(
         str) + df_episodes_info['episode'].apply(_val_episode)
@@ -53,7 +61,9 @@ def get_extracted_script():
     return df_script
 
 
-def load_script(no_spoil_season=None, no_spoil_episode=None, process_lines=True):
+def load_script(no_spoil_season=9, no_spoil_episode=23,
+                process_lines=True, analysis=True,
+                explode_mentions=True, filter_names=True):
     """
     Reads in csv with one row per line
 
@@ -75,18 +85,21 @@ def load_script(no_spoil_season=None, no_spoil_episode=None, process_lines=True)
 
     if no_spoil_episode:
         # Keep data only about the episode seen
-
         id_last_episode = df[(df['season'] == no_spoil_season)
                              & (df['episode'] == no_spoil_episode)].id_episode.values[0]
         df = df[df['id_episode'] <= id_last_episode]
 
     df = df.merge(df_episodes_info, on='id_episode')
 
+    if filter_names:
+        df = df[df['speaker'].isin(NAMES_LIST)]
+
     if process_lines:
         df = process.process_lines(df)
-
-    #df = agg.filter_script(df, {'speaker': NAMES_LIST})
-
+        if analysis:
+            df = line.line_analysis(df)
+            if explode_mentions:
+                df = df.explode('mentions')
     return df
 
 
