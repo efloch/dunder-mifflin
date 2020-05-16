@@ -1,7 +1,7 @@
 from src.params import *
 from src.config import *
 import src.process_lines as process
-import aggregate_script as agg
+import src.aggregate_script as agg
 
 
 def get_episode_info(save=False):
@@ -53,7 +53,7 @@ def get_extracted_script():
     return df_script
 
 
-def load_script(no_spoil_season=8, no_spoil_episode=23, process_lines=True):
+def load_script(no_spoil_season, no_spoil_episode, process_lines=True):
     """
     Reads in csv with one row per line
 
@@ -92,6 +92,6 @@ def load_script(no_spoil_season=8, no_spoil_episode=23, process_lines=True):
 
 if __name__ == '__main__':
     # To load pre-cleaned csv
-    df = load_script(no_spoil_season=8, no_spoil_episode=4)
+    df = load_script()
     df.to_csv(os.path.join(DATA_PATH, 'processed/processed_script.csv'))
     print(df)
