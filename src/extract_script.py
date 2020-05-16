@@ -3,9 +3,6 @@ import src.line_analysis as line
 from src.params import *
 from src.config import *
 import src.process_lines as process
-<< << << < HEAD
-== == == =
->>>>>> > 08762344ed28b456112b89596fc94f86a50b8bc0
 
 
 def get_episode_info(save=False):
