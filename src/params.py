@@ -1,4 +1,4 @@
-from src.config import *
+from src.utils import *
 
 COUNT_METHOD = ['words', 'lines']
 
