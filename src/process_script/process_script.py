@@ -40,7 +40,8 @@ def _val_episode(x):
 
 
 def load_script(no_spoil_season=9, no_spoil_episode=23,
-                process_lines=True, analysis=True):
+                process_lines=True, analysis=True,
+                explode_mentions=True, filter_names=True):
     """
     Reads in csv with one row per line
 
@@ -69,12 +70,28 @@ def load_script(no_spoil_season=9, no_spoil_episode=23,
 
     df = df.merge(df_episodes_info, on='id_episode')
 
-    df = df[df['speaker'].isin(NAMES_LIST)]
+    if filter_names:
+        df = df[df['speaker'].isin(NAMES_LIST)]
 
     if process_lines:
         df = process.process_lines(df)
         if analysis:
             df = line.line_analysis(df)
+
+
+<< << << < HEAD: src/process_script/process_script.py
             df = df.explode('mentions')
 
     return df
+=======
+            if explode_mentions:
+                df = df.explode('mentions')
+    return df
+
+
+if __name__ == '__main__':
+    # To load pre-cleaned csv
+    df = load_script()
+    df.to_csv(os.path.join(DATA_PATH, 'processed/processed_script.csv'))
+    print(df)
+>>>>>>> 406af48986cc4169a1dafb9eb580dc965f122dca:src/extract_script.py
