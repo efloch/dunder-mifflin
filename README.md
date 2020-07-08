@@ -2,14 +2,10 @@
 
 ### How to use 
 
-Download the raw scripts from this link https://docs.google.com/spreadsheets/d/18wS5AAwOh8QO95RwHLS95POmSNKA2jjzdt0phrxeAE0/edit#gid=747974534
-into the data/raw/ folder 
-
 In the root folder, run 
 'python -m run'
 
-
-The script will be loaded, analyses and key statistics will be saved into the data/processed/ folder.
+The script will be loaded, analyzed and key statistics will be saved into the data/processed/ folder.
 
 ### The process 
 
